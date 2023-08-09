@@ -2,7 +2,7 @@ struct Hashing{
     vector<int> h;
     vector<int> p;
     Hashing(string s, int mod){
-        s = "$" + s;
+       // s = "$" + s;
         h.resize(s.size());
         p.resize(s.size());
         p[0] = 1;

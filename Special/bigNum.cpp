@@ -43,8 +43,8 @@ struct Z{
     void operator += (const Z &other){*this = *this + other;};
     void operator -= (const Z &other){*this = *this - other;};
     void operator *= (const Z &other){*this = *this * other;};
-    void operator /= (const Z &other){*this =  *this / other;};
-    void operator %= (const Z &other){*this =  *this % other;};
+    void operator /= (const Z &other){*this = *this / other;};
+    void operator %= (const Z &other){*this = *this % other;};
 
     Z operator + (const Z &other){
         string a = s; reverse(a.begin(), a.end());
@@ -139,11 +139,11 @@ struct Z{
         Z tmp;
         
         for (auto i : a){
-            tmp = tmp * Z(10) + Z(i);
+            tmp = tmp * Z("10") + Z(i);
             int x = 9;
             while(x && tmp < p[x]) x--;
-            if(!x && ans == Z(0)) continue;
-            ans = ans * Z(10) + Z(x);
+            if(!x && ans == Z("0")) continue;
+            ans = ans * Z("10") + Z(x);
             tmp -= p[x];
         }
         return {ans.s, tmp.s};
