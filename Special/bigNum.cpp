@@ -1,15 +1,20 @@
 struct Z{
     string s;
-    Z(string x): s(x){};
-    Z(int x): s(to_string(x)){};
-    Z(char x){
-        s = "";
-        s += x;
-    };
-    Z(){
-        s = "0";
+    Z& f(int n){
+        this->s = to_string(n);
+        return *this;
+    }
+
+    Z& f(string x){
+        this->s = x;
+        return *this;   
     };
 
+    Z(string x){
+        f(x);
+    };
+    Z(int x){ f(x); };
+    Z(){ f(0); };
 
     bool operator < (const Z &other){
         if(s == other.s) return 0;
@@ -66,7 +71,7 @@ struct Z{
             ans += '1';
         }
         reverse(ans.begin(), ans.end());
-        return Z(ans);
+        return ans;
     }
 
 
@@ -99,14 +104,14 @@ struct Z{
 
         if(check) ans += '-';
         reverse(ans.begin(), ans.end());
-        return Z(ans);
+        return ans;
     }
     
 
     Z operator* (const Z &other){
         string a = s;
         string b = other.s;
-        if(a == "0" || b == "0") return Z("0");
+        if(a == "0" || b == "0") return 0;
 
         Z p[10];
         for(int i = 1; i <= 9; i++){
@@ -127,23 +132,26 @@ struct Z{
         return ans;
     }
 
-    Z operator/ (const Z &other){return Z(div(s, other.s).first);}
-    Z operator% (const Z &other){return Z(div(s, other.s).second);}
+    Z operator/ (const Z &other){return div(s, other.s).first;}
+    Z operator% (const Z &other){return div(s, other.s).second;}
 
     pair<string, string> div(const string &a, const string &b){
+        if(b == "0"){
+            return {"nan","nan"};
+        }
         Z p[10];
         for(int i = 1; i <= 9; i++){
-            p[i] = p[i - 1] + Z(b);
+            p[i] = p[i - 1] + b;
         }
         Z ans;
         Z tmp;
         
         for (auto i : a){
-            tmp = tmp * Z("10") + Z(i);
+            tmp = tmp * 10 + (i - '0');
             int x = 9;
             while(x && tmp < p[x]) x--;
-            if(!x && ans == Z("0")) continue;
-            ans = ans * Z("10") + Z(x);
+            if(!x && ans == 0) continue;
+            ans = ans * 10 + x;
             tmp -= p[x];
         }
         return {ans.s, tmp.s};

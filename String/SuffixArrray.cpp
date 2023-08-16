@@ -34,6 +34,7 @@ struct SuffixArray {
         }
         sa = tmpSA;
     }
+
     void buildSA() {
         for (int i = 0; i < n; ++i) {
             sa[i] = i;
@@ -49,8 +50,10 @@ struct SuffixArray {
                 b = (b + k >= n) ? -1 : rank[b + k];
                 return a < b;
             };
+
             countingSort(k);
             countingSort(0);
+
             temp[sa[0]] = 0;
             for (int i = 1; i < n; ++i) {
                 temp[sa[i]] = temp[sa[i - 1]] + cmp(sa[i - 1], sa[i]);
@@ -64,7 +67,7 @@ struct SuffixArray {
         lcp.resize(n);
         for (int i = 0, k = 0; i < n; i++){
             if(rank[i] != n - 1){
-                for (int j = sa[rank[i] + 1];max(i + k, j + k) < n && s[i + k] == s[j + k];){
+                for (int j = sa[rank[i] + 1]; max(i + k, j + k) < n && s[i + k] == s[j + k];){
                     k++;
                 }
                 lcp[rank[i]] = k;
