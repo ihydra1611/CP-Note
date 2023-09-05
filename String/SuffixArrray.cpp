@@ -1,19 +1,16 @@
 struct SuffixArray {
     string s;
-    int n;
-    vector<int> sa, rank, temp, lcp;
+    int n,k;
+    vector<int> sa, rank, tmp, lcp;
 
-    SuffixArray(){};
-
-    void all(string &input){
-        s = input + "$";
-        n = s.size();
-        sa.resize(n);
-        rank.resize(n);
-        temp.resize(n);
+    SuffixArray(string &input){
+        s = input;
+        n = s.size() + 1;
+        sa.resize(n); rank.resize(n); tmp.resize(n);
         buildSA();
         buildLCP();
     }
+
 
     void countingSort(int k){
         int maxn = max(300LL,n);
@@ -28,12 +25,19 @@ struct SuffixArray {
             sum += t;
         }
 
-        vector<int> tmpSA(n);
         for (int i = 0; i < n; i++){
-            tmpSA[c[sa[i] + k < n ? rank[sa[i] + k] : 0]++] = sa[i];
+            tmp[c[sa[i] + k < n ? rank[sa[i] + k] : 0]++] = sa[i];
         }
-        sa = tmpSA;
+        sa = tmp;
     }
+
+    bool cmp(int a, int b) {
+        if (rank[a] != rank[b])
+            return rank[a] < rank[b];
+        a = (a + k >= n) ? -1 : rank[a + k];
+        b = (b + k >= n) ? -1 : rank[b + k];
+        return a < b;
+    };
 
     void buildSA() {
         for (int i = 0; i < n; ++i) {
@@ -41,24 +45,16 @@ struct SuffixArray {
             rank[i] = s[i];
         }
 
-        
-        for (int k = 1; k < n; k *= 2) {
-            auto cmp = [&](int a, int b) {
-                if (rank[a] != rank[b])
-                    return rank[a] < rank[b];
-                a = (a + k >= n) ? -1 : rank[a + k];
-                b = (b + k >= n) ? -1 : rank[b + k];
-                return a < b;
-            };
-
+        for (k = 1; k < n; k <<= 1) {
             countingSort(k);
             countingSort(0);
-
-            temp[sa[0]] = 0;
+            tmp[sa[0]] = 0;
             for (int i = 1; i < n; ++i) {
-                temp[sa[i]] = temp[sa[i - 1]] + cmp(sa[i - 1], sa[i]);
+                tmp[sa[i]] = tmp[sa[i - 1]] + cmp(sa[i - 1], sa[i]);
             }
-            rank = temp;
+            rank = tmp;
+
+            if(rank[sa[n - 1]] == n - 1) break;
         }
     }
 

@@ -5,13 +5,14 @@ struct Fenwick{
         for (int i = 1; i <= n; i++) a[i] = 0;
     }
 
-    void update(int i, int val){
+    void add(int i, int val){
+        if(i == 0) return;
         for (; i <= n; i += (i & -i)){
             a[i] += val;
         }
     }
 
-    int getSum(int i){
+    int prefix(int i){
         int res = 0;
         for (; i ; i -= (i & -i)){
             res += a[i];
@@ -19,8 +20,8 @@ struct Fenwick{
         return res;
     }
 
-    int query(int l, int r){
-        return getSum(r) - getSum(l - 1);
+    int get(int l, int r){
+        return prefix(r) - prefix(l - 1);
     }
 
 };

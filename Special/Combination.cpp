@@ -1,4 +1,4 @@
-const int N = 1e6+5, mod = 1e9+7;
+const int N = 1e6+5;
 int fac[N];
 int inv_fac[N];
 int __pow(int a, int p){

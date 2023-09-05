@@ -8,12 +8,12 @@ struct Hashing{
         p[0] = 1;
 
         for (int i = 1; i < s.size(); i++){
-            p[i] = p[i - 1] * 131 % mod;
+            p[i] = p[i - 1] * 311 % mod;
         }
 
         h[0] = 0;
         for (int i = 1; i < s.size(); i++){
-            h[i] = (h[i - 1] * 131  + s[i]) % mod;
+            h[i] = (h[i - 1] * 311  + s[i]) % mod;
         }
     }
 

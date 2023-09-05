@@ -4,20 +4,21 @@ struct Fenwick{
     Fenwick(int n) : n(n), bit1(n + 5), bit2(n + 5){};
 
 
-    void update(vector<int> &a, int i, int val){
+    void add(vector<int> &a, int i, int val){
+        if(i == 0) return;
         for (; i <= n; i += (i & -i)){
             a[i] += val;
         }
     }
 
-    void updateRange(int l, int r, int v) {
-        update(bit1, l, (n - l + 1) * v);
-        update(bit1, r + 1, -(n - r) * v);
-        update(bit2, l, v);
-        update(bit2, r + 1, -v);
+    void add(int l, int r, int v) {
+        add(bit1, l, (n - l + 1) * v);
+        add(bit1, r + 1, -(n - r) * v);
+        add(bit2, l, v);
+        add(bit2, r + 1, -v);
     }
 
-    int getSum(vector<int> &a, int i){
+    int prefixSum(vector<int> &a, int i){
         int res = 0;
         for (; i ; i -= (i & -i)){
             res += a[i];
@@ -25,13 +26,12 @@ struct Fenwick{
         return res;
     }
 
-    int prefixSum(int u) {
-        return getSum(bit1, u) - getSum(bit2, u) * (n - u);
+    int prefix(int u) {
+        return prefixSum(bit1, u) - prefixSum(bit2, u) * (n - u);
     }
 
-    int query(int l, int r) {
-        return prefixSum(r) - prefixSum(l - 1);
+    int get(int l, int r) {
+        return prefix(r) - prefix(l - 1);
     }
 
 };
-
